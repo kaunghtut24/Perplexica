@@ -1,6 +1,5 @@
 {
-  // Vercel configuration for automatic deployments
-  "version": 2,
+    "version": 2,
   "buildCommand": "npm run vercel-build",
   "installCommand": "npm install",
   "framework": "nextjs",
