@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run vercel-build",
   "installCommand": "npm install",
   "framework": "nextjs",
   "builds": [
@@ -27,6 +27,11 @@
   "build": {
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  },
+  "git": {
+    "deploymentEnabled": {
+      "master": true
     }
   }
 } 
