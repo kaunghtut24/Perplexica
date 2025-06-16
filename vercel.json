@@ -22,5 +22,10 @@
     "CUSTOM_OPENAI_API_URL": "@custom_openai_api_url",
     "CUSTOM_OPENAI_API_KEY": "@custom_openai_api_key",
     "CUSTOM_OPENAI_MODEL_NAME": "@custom_openai_model_name"
+  },
+  "build": {
+    "env": {
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
   }
 } 

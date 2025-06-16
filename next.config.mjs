@@ -11,11 +11,22 @@ const nextConfig = {
   // Enable experimental features for better performance
   experimental: {
     serverActions: true,
-    serverComponentsExternalPackages: ['@vercel/postgres'],
+    serverComponentsExternalPackages: ['@vercel/postgres', 'pdf-parse'],
   },
   // Configure environment variables
   env: {
     POSTGRES_URL: process.env.POSTGRES_URL,
+  },
+  // Add webpack configuration for better compatibility
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+      };
+    }
+    return config;
   },
 };
 

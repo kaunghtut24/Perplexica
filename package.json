@@ -5,7 +5,7 @@
   "author": "ItzCrazyKns",
   "scripts": {
     "dev": "next dev",
-    "build": "npm run db:push && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "format:write": "prettier . --write",
@@ -13,7 +13,8 @@
     "db:generate": "drizzle-kit generate:pg",
     "db:migrate": "tsx src/lib/db/migrate.ts",
     "db:studio": "drizzle-kit studio",
-    "postdeploy": "node vercel-post-deploy.js"
+    "postdeploy": "node vercel-post-deploy.js",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
