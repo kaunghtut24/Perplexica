@@ -17,7 +17,7 @@ import LineListOutputParser from '../outputParsers/listLineOutputParser';
 import LineOutputParser from '../outputParsers/lineOutputParser';
 import { getDocumentsFromLinks } from '../utils/documents';
 import { Document } from 'langchain/document';
-import { searchSearxng } from '../searxng';
+import { SearchService } from './searchService';
 import path from 'node:path';
 import fs from 'node:fs';
 import computeSimilarity from '../utils/computeSimilarity';
@@ -205,9 +205,10 @@ class MetaSearchAgent implements MetaSearchAgentType {
         } else {
           question = question.replace(/<think>.*?<\/think>/g, '');
 
-          const res = await searchSearxng(question, {
-            language: 'en',
-            engines: this.config.activeEngines,
+          const searchService = new SearchService();
+          const res = await searchService.search(question, {
+            num_results: 10,
+            search_type: 'web',
           });
 
           const documents = res.results.map(
