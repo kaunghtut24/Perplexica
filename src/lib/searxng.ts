@@ -15,7 +15,7 @@ export interface SearxNGResponse {
   number_of_results: number;
 }
 
-export async function searchSearxNG(query: string, category: string = 'general'): Promise<SearxNGResponse> {
+const searchSearxNG = async (query: string, category: string = 'general'): Promise<SearxNGResponse> => {
   try {
     const searxngUrl = getSearxngApiEndpoint();
     const response = await axios.get(`${searxngUrl}/search`, {
@@ -34,16 +34,18 @@ export async function searchSearxNG(query: string, category: string = 'general')
     console.error('SearxNG search error:', error);
     throw new Error('Failed to perform search');
   }
-}
+};
 
-export async function searchImages(query: string): Promise<SearxNGResponse> {
+export const searchImages = async (query: string): Promise<SearxNGResponse> => {
   return searchSearxNG(query, 'images');
-}
+};
 
-export async function searchVideos(query: string): Promise<SearxNGResponse> {
+export const searchVideos = async (query: string): Promise<SearxNGResponse> => {
   return searchSearxNG(query, 'videos');
-}
+};
 
-export async function searchNews(query: string): Promise<SearxNGResponse> {
+export const searchNews = async (query: string): Promise<SearxNGResponse> => {
   return searchSearxNG(query, 'news');
-} 
+};
+
+export { searchSearxNG }; 
