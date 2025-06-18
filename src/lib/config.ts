@@ -1,4 +1,5 @@
 import toml from '@iarna/toml';
+import { env } from './utils/env';
 
 // Use dynamic imports for Node.js modules to prevent client-side errors
 let fs: any;
@@ -49,53 +50,83 @@ interface Config {
   };
 }
 
-type RecursivePartial<T> = {
-  [P in keyof T]?: RecursivePartial<T[P]>;
-};
-
 const loadConfig = () => {
-  // Server-side only
-  if (typeof window === 'undefined') {
-    return toml.parse(
-      fs.readFileSync(path.join(process.cwd(), `${configFileName}`), 'utf-8'),
-    ) as any as Config;
-  }
+  try {
+    // Server-side only
+    if (typeof window === 'undefined') {
+      try {
+        const parsedConfig = toml.parse(
+          fs.readFileSync(path.join(process.cwd(), configFileName), 'utf-8'),
+        );
+        return parsedConfig as unknown as Config;
+      } catch (error) {
+        console.warn(`Warning: Could not load ${configFileName}. Using environment variables only.`);
+        // Return a default config that will be overridden by environment variables
+        return {
+          GENERAL: {
+            SIMILARITY_MEASURE: 'cosine',
+            KEEP_ALIVE: '5m',
+          },
+          MODELS: {
+            OPENAI: { API_KEY: '' },
+            GROQ: { API_KEY: '' },
+            ANTHROPIC: { API_KEY: '' },
+            GEMINI: { API_KEY: '' },
+            OLLAMA: { API_URL: '' },
+            DEEPSEEK: { API_KEY: '' },
+            LM_STUDIO: { API_URL: '' },
+            CUSTOM_OPENAI: { API_URL: '', API_KEY: '', MODEL_NAME: '' },
+          },
+          API_ENDPOINTS: {
+            SEARXNG: '',
+          },
+        };
+      }
+    }
 
-  // Client-side fallback - settings will be loaded via API
-  return {} as Config;
+    // Client-side fallback - settings will be loaded via API
+    return {} as Config;
+  } catch (error) {
+    console.error('Error loading config:', error);
+    throw new Error('Failed to load configuration');
+  }
 };
 
-export const getSimilarityMeasure = () =>
-  loadConfig().GENERAL.SIMILARITY_MEASURE;
-
+// Get config values with environment variable fallbacks
+export const getSimilarityMeasure = () => loadConfig().GENERAL.SIMILARITY_MEASURE;
 export const getKeepAlive = () => loadConfig().GENERAL.KEEP_ALIVE;
 
-export const getOpenaiApiKey = () => loadConfig().MODELS.OPENAI.API_KEY;
-
+export const getOpenaiApiKey = () => env.OPENAI_API_KEY || loadConfig().MODELS.OPENAI.API_KEY;
 export const getGroqApiKey = () => loadConfig().MODELS.GROQ.API_KEY;
-
 export const getAnthropicApiKey = () => loadConfig().MODELS.ANTHROPIC.API_KEY;
-
-export const getGeminiApiKey = () => loadConfig().MODELS.GEMINI.API_KEY;
-
-export const getSearxngApiEndpoint = () =>
-  process.env.SEARXNG_API_URL || loadConfig().API_ENDPOINTS.SEARXNG;
-
+export const getGeminiApiKey = () => env.GOOGLE_API_KEY || loadConfig().MODELS.GEMINI.API_KEY;
 export const getOllamaApiEndpoint = () => loadConfig().MODELS.OLLAMA.API_URL;
-
 export const getDeepseekApiKey = () => loadConfig().MODELS.DEEPSEEK.API_KEY;
+export const getLMStudioApiEndpoint = () => loadConfig().MODELS.LM_STUDIO.API_URL;
 
-export const getCustomOpenaiApiKey = () =>
-  loadConfig().MODELS.CUSTOM_OPENAI.API_KEY;
+export const getCustomOpenaiApiKey = () => loadConfig().MODELS.CUSTOM_OPENAI.API_KEY;
+export const getCustomOpenaiApiUrl = () => loadConfig().MODELS.CUSTOM_OPENAI.API_URL;
+export const getCustomOpenaiModelName = () => loadConfig().MODELS.CUSTOM_OPENAI.MODEL_NAME;
 
-export const getCustomOpenaiApiUrl = () =>
-  loadConfig().MODELS.CUSTOM_OPENAI.API_URL;
+export const getSearxngApiEndpoint = () => 
+  env.SEARXNG_API_URL || loadConfig().API_ENDPOINTS.SEARXNG;
 
-export const getCustomOpenaiModelName = () =>
-  loadConfig().MODELS.CUSTOM_OPENAI.MODEL_NAME;
-
-export const getLMStudioApiEndpoint = () =>
-  loadConfig().MODELS.LM_STUDIO.API_URL;
+export const updateConfig = (config: Partial<Config>) => {
+  // Server-side only
+  if (typeof window === 'undefined') {
+    try {
+      const currentConfig = loadConfig();
+      const mergedConfig = mergeConfigs(currentConfig, config);
+      fs.writeFileSync(
+        path.join(process.cwd(), configFileName),
+        toml.stringify(mergedConfig),
+      );
+    } catch (error) {
+      console.error('Error updating config:', error);
+      throw new Error('Failed to update configuration');
+    }
+  }
+};
 
 const mergeConfigs = (current: any, update: any): any => {
   if (update === null || update === undefined) {
@@ -126,16 +157,4 @@ const mergeConfigs = (current: any, update: any): any => {
   }
 
   return result;
-};
-
-export const updateConfig = (config: RecursivePartial<Config>) => {
-  // Server-side only
-  if (typeof window === 'undefined') {
-    const currentConfig = loadConfig();
-    const mergedConfig = mergeConfigs(currentConfig, config);
-    fs.writeFileSync(
-      path.join(path.join(process.cwd(), `${configFileName}`)),
-      toml.stringify(mergedConfig),
-    );
-  }
 };
