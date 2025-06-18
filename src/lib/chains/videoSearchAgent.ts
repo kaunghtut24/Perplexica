@@ -7,7 +7,7 @@ import { PromptTemplate } from '@langchain/core/prompts';
 import formatChatHistoryAsString from '../utils/formatHistory';
 import { BaseMessage } from '@langchain/core/messages';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { searchSearxng } from '../searxng';
+import { searchSearxNG } from '../searxng';
 import type { BaseChatModel } from '@langchain/core/language_models/chat_models';
 
 const VideoSearchChainPrompt = `
@@ -61,7 +61,7 @@ const createVideoSearchChain = (llm: BaseChatModel) => {
     RunnableLambda.from(async (input: string) => {
       input = input.replace(/<think>.*?<\/think>/g, '');
 
-      const res = await searchSearxng(input, {
+      const res = await searchSearxNG(input, {
         engines: ['youtube'],
       });
 

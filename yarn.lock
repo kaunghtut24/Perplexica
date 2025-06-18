@@ -653,7 +653,7 @@
     "@anthropic-ai/sdk" "^0.39.0"
     fast-xml-parser "^4.4.1"
 
-"@langchain/community@^0.3.36":
+"@langchain/community@^0.3.46":
   version "0.3.46"
   resolved "https://registry.yarnpkg.com/@langchain/community/-/community-0.3.46.tgz#87f48b4d7ab76c3bb2801b233374c38912bc492e"
   integrity sha512-loix9LkoNcn1gQlVCopmrJW9TmgZb+YpZw7nkFzXT6ozR8ZDh1XlFq1ymR5gTFtdNzF0neK2oJtE9iEl1lm7Dw==

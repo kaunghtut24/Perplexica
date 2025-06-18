@@ -1,4 +1,4 @@
-import { searchSearxng } from '@/lib/searxng';
+import { searchSearxNG } from '@/lib/searxng';
 
 const articleWebsites = [
   'yahoo.com',
@@ -29,7 +29,7 @@ export const GET = async (req: Request) => {
             .fill(0)
             .map(async (_, i) => {
               return (
-                await searchSearxng(
+                await searchSearxNG(
                   `site:${articleWebsites[i % articleWebsites.length]} ${
                     topics[i % topics.length]
                   }`,
@@ -47,7 +47,7 @@ export const GET = async (req: Request) => {
         .sort(() => Math.random() - 0.5);
     } else {
       data = (
-        await searchSearxng(
+        await searchSearxNG(
           `site:${articleWebsites[Math.floor(Math.random() * articleWebsites.length)]} ${topics[Math.floor(Math.random() * topics.length)]}`,
           { engines: ['bing news'], pageno: 1 },
         )
