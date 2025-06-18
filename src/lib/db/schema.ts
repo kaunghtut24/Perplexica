@@ -1,12 +1,12 @@
 import { sql } from 'drizzle-orm';
-import { text, integer, pgTable, timestamp, jsonb } from 'drizzle-orm/pg-core';
+import { text, integer, pgTable, timestamp, jsonb, serial } from 'drizzle-orm/pg-core';
 
 export const messages = pgTable('messages', {
-  id: integer('id').primaryKey().notNull(),
+  id: serial('id').primaryKey(),
   content: text('content').notNull(),
   chatId: text('chatId').notNull(),
   messageId: text('messageId').notNull(),
-  role: text('type', { enum: ['assistant', 'user'] }),
+  role: text('role', { enum: ['assistant', 'user'] }).notNull(),
   metadata: jsonb('metadata'),
   createdAt: timestamp('created_at').defaultNow(),
 });

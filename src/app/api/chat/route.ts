@@ -111,6 +111,7 @@ const handleEmitterEvents = async (
           createdAt: new Date(),
           ...(sources && sources.length > 0 && { sources }),
         }),
+        createdAt: new Date(),
       })
       .execute();
   });
@@ -144,7 +145,7 @@ const handleHistorySave = async (
       .values({
         id: message.chatId,
         title: message.content,
-        createdAt: new Date().toString(),
+        createdAt: new Date(),
         focusMode: focusMode,
         files: files.map(getFileDetails),
       })
@@ -166,6 +167,7 @@ const handleHistorySave = async (
         metadata: JSON.stringify({
           createdAt: new Date(),
         }),
+        createdAt: new Date(),
       })
       .execute();
   } else {
