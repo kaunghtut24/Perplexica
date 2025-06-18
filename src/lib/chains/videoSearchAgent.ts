@@ -72,7 +72,7 @@ const createVideoSearchChain = (llm: BaseChatModel) => {
           result.content
         ) {
           videos.push({
-            img_src: result.thumbnail,
+            img_src: result.thumbnail || '',
             title: result.title,
             url: result.url,
             description: result.content,
