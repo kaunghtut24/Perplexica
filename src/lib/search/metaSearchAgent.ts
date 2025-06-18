@@ -211,18 +211,17 @@ class MetaSearchAgent implements MetaSearchAgentType {
             search_type: 'web',
           });
 
-          const documents = res.results.map(
+          const documents = res.map(
             (result) =>
               new Document({
                 pageContent:
-                  result.content ||
+                  result.snippet ||
                   (this.config.activeEngines.includes('youtube')
                     ? result.title
                     : '') /* Todo: Implement transcript grabbing using Youtubei (source: https://www.npmjs.com/package/youtubei) */,
                 metadata: {
                   title: result.title,
-                  url: result.url,
-                  ...(result.img_src && { img_src: result.img_src }),
+                  url: result.link,
                 },
               }),
           );
