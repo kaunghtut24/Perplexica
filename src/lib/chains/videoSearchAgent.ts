@@ -40,7 +40,7 @@ interface VideoSearchResult {
   img_src: string;
   url: string;
   title: string;
-  iframe_src: string;
+  description: string;
 }
 
 const strParser = new StringOutputParser();
@@ -67,16 +67,15 @@ const createVideoSearchChain = (llm: BaseChatModel) => {
 
       res.results.forEach((result) => {
         if (
-          result.thumbnail &&
           result.url &&
           result.title &&
-          result.iframe_src
+          result.content
         ) {
           videos.push({
             img_src: result.thumbnail,
-            url: result.url,
             title: result.title,
-            iframe_src: result.iframe_src,
+            url: result.url,
+            description: result.content,
           });
         }
       });
