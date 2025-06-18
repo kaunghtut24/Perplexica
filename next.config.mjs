@@ -10,8 +10,9 @@ const nextConfig = {
   },
   // Enable experimental features for better performance
   experimental: {
-    serverActions: true,
-    serverComponentsExternalPackages: ['@vercel/postgres', 'pdf-parse'],
+    serverActions: {
+      allowedOrigins: ['*']
+    }
   },
   // Configure environment variables
   env: {
