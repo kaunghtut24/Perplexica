@@ -61,9 +61,7 @@ const createVideoSearchChain = (llm: BaseChatModel) => {
     RunnableLambda.from(async (input: string) => {
       input = input.replace(/<think>.*?<\/think>/g, '');
 
-      const res = await searchSearxNG(input, {
-        engines: ['youtube'],
-      });
+      const res = await searchSearxNG(input, 'videos');
 
       const videos: VideoSearchResult[] = [];
 
