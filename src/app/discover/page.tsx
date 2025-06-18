@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 interface Discover {
   title: string;
@@ -85,14 +86,12 @@ const Page = () => {
                 className="max-w-sm rounded-lg overflow-hidden bg-light-secondary dark:bg-dark-secondary hover:-translate-y-[1px] transition duration-200"
                 target="_blank"
               >
-                <img
-                  className="object-cover w-full aspect-video"
-                  src={
-                    new URL(item.thumbnail).origin +
-                    new URL(item.thumbnail).pathname +
-                    `?id=${new URL(item.thumbnail).searchParams.get('id')}`
-                  }
+                <Image
+                  src={item.thumbnail}
                   alt={item.title}
+                  width={200}
+                  height={150}
+                  className="w-full h-48 object-cover rounded-t-lg"
                 />
                 <div className="px-6 py-4">
                   <div className="font-bold text-lg mb-2">
